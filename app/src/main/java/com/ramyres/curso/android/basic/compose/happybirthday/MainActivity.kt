@@ -55,21 +55,25 @@ class MainActivity : ComponentActivity() {
                     val template_message = stringResource(R.string.happy_birthday_text)
                     val template_from = stringResource(R.string.signature_text);
 
-                    if (state_name.isEmpty()) {
-                        FormSettings(onClickBuildCard = { name, from ->
-                            state_name = name
-                            state_from = from
-                        })
-                    } else {
-                        GreetingImage(
-                            message = "$template_message $state_name",
-                            from = "$template_from $state_from",
-                            modifier = Modifier.padding(8.dp),
-                            onClickBack = {
-                                state_name = "Parabéns"
-                                state_from = ""
-                            }
-                        )
+                    if (false){
+                        SemAcesso()
+                    }else {
+                        if (state_name.isEmpty()) {
+                            FormSettings(onClickBuildCard = { name, from ->
+                                state_name = name
+                                state_from = from
+                            })
+                        } else {
+                            GreetingImage(
+                                message = "$template_message $state_name",
+                                from = "$template_from $state_from",
+                                modifier = Modifier.padding(8.dp),
+                                onClickBack = {
+                                    state_name = ""
+                                    state_from = ""
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -133,11 +137,6 @@ fun GreetingImage(
 }
 
 @Composable
-fun NavBar(modifier: Modifier = Modifier) {
-    Text(text = "Hello")
-}
-
-@Composable
 fun FormSettings(
     onClickBuildCard: (name: String, from: String) -> Unit,
     modifier: Modifier = Modifier
@@ -156,7 +155,7 @@ fun FormSettings(
             .fillMaxWidth()
     ) {
         Text(
-            text = "Settings",
+            text = stringResource(R.string.settings),
             fontSize = 30.sp,
             modifier = Modifier
                 .padding(bottom = 30.dp, top = 90.dp)
@@ -171,8 +170,7 @@ fun FormSettings(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         )
-        Text(text = "From name:",
-            fontSize = 20.sp)
+
         TextField(
             value = from,
             onValueChange = { from = it },
@@ -184,14 +182,44 @@ fun FormSettings(
             modifier = modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
-            onClick = {
-                onClickBuildCard(name, from)
-            }) {
+            onClick = {}
+        ) {
             Text(
                 text = "Build Birthday Card",
                 fontSize = 20.sp
             )
         }
+    }
+}
+
+@Composable
+fun SemAcesso(modifier: Modifier = Modifier) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+    Column(modifier.fillMaxSize()) {
+        Text(text = "Sem permissão!",
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 100.dp)
+                .align(alignment = Alignment.CenterHorizontally)
+        )}
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Greeting",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun SemAcessoPreview() {
+    HappyBirthdayTheme {
+        SemAcesso()
     }
 }
 
